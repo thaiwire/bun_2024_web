@@ -24,13 +24,19 @@ export default function Home() {
       const payload = { username, password };
 
       const response = await axios.post(
-        `${config.apiUrl}/api/user/login`,
+        `${config.apiUrl}/user/signin`,
         payload
       );
 
       if (response.data.token !== undefined) {
         localStorage.setItem(config.tokenKey, response.data.token);
-        router.push("/dashboard");
+        router.push("/backoffice/dashboard");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: response.data.message || "Invalid username or password.",
+        });
       }
     } catch (error: any) {
       Swal.fire({
